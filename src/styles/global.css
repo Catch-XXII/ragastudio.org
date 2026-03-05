@@ -1,0 +1,155 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Stone palette from iran-cost-ticker */
+  --color-bg: #0c0a09;
+  --color-bg-light: #fafaf9;
+  --color-surface: rgba(255, 255, 255, 0.03);
+  --color-surface-light: rgba(0, 0, 0, 0.03);
+  --color-border: rgba(255, 255, 255, 0.06);
+  --color-border-light: rgba(0, 0, 0, 0.08);
+
+  --color-text-primary: #e7e5e4;
+  --color-text-secondary: #a8a29e;
+  --color-text-muted: #78716c;
+  --color-text-faint: #57534e;
+
+  --color-text-primary-light: #1c1917;
+  --color-text-secondary-light: #57534e;
+  --color-text-muted-light: #78716c;
+
+  --color-accent: #ef4444;
+  --color-accent-soft: #f87171;
+  --color-accent-softer: #fca5a5;
+
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-serif: "Newsreader", Georgia, serif;
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-serif);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+:where(.light) body {
+  background-color: var(--color-bg-light);
+  color: var(--color-text-primary-light);
+}
+
+:where(.light) {
+  --color-bg: var(--color-bg-light);
+  --color-surface: var(--color-surface-light);
+  --color-border: var(--color-border-light);
+  --color-text-primary: var(--color-text-primary-light);
+  --color-text-secondary: var(--color-text-secondary-light);
+  --color-text-muted: var(--color-text-muted-light);
+  --color-text-faint: var(--color-text-secondary-light);
+}
+
+/* Typography prose overrides for dark */
+.prose {
+  --tw-prose-body: var(--color-text-primary);
+  --tw-prose-headings: var(--color-text-primary);
+  --tw-prose-links: var(--color-accent-soft);
+  --tw-prose-bold: var(--color-text-primary);
+  --tw-prose-code: var(--color-accent-softer);
+  --tw-prose-pre-bg: rgba(255, 255, 255, 0.03);
+  --tw-prose-pre-code: var(--color-text-primary);
+  --tw-prose-quotes: var(--color-text-secondary);
+  --tw-prose-hr: var(--color-border);
+  --tw-prose-counters: var(--color-text-muted);
+  --tw-prose-bullets: var(--color-text-faint);
+}
+
+:where(.light) .prose {
+  --tw-prose-body: var(--color-text-primary-light);
+  --tw-prose-headings: var(--color-text-primary-light);
+  --tw-prose-links: var(--color-accent);
+  --tw-prose-bold: var(--color-text-primary-light);
+  --tw-prose-code: #b91c1c;
+  --tw-prose-pre-bg: rgba(0, 0, 0, 0.03);
+  --tw-prose-pre-code: var(--color-text-primary-light);
+  --tw-prose-quotes: var(--color-text-secondary-light);
+}
+
+/* Code block styling */
+.prose pre {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  position: relative;
+}
+
+.prose pre .copy-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-text-faint);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s, background 0.2s;
+}
+
+.prose pre:hover .copy-btn {
+  opacity: 1;
+}
+
+.prose pre .copy-btn:hover {
+  color: var(--color-text-muted);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.prose pre .copy-btn.copied {
+  color: #4ade80;
+  opacity: 1;
+}
+
+:where(.light) .prose pre .copy-btn {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: var(--color-border-light);
+}
+
+:where(.light) .prose pre .copy-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.prose code::before,
+.prose code::after {
+  display: none;
+}
+
+.prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+:where(.light) .prose :not(pre) > code {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+/* Links */
+a {
+  text-decoration-skip-ink: auto;
+  text-underline-offset: 2px;
+}

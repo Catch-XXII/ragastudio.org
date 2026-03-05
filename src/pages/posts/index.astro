@@ -1,0 +1,36 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostCard from "../../components/PostCard.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import { getCollection } from "astro:content";
+import { getReadingTime } from "../../utils/reading-time";
+
+const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+---
+
+<BaseLayout title="All Posts — ragastudio" description="All blog posts">
+  <Breadcrumbs items={[{ label: "Posts" }]} />
+  <h1
+    class="font-[family-name:var(--font-mono)] text-sm tracking-[3px] uppercase text-[var(--color-text-muted)] font-semibold mb-6"
+  >
+    All Posts
+  </h1>
+  {
+    posts.length === 0 ? (
+      <p class="text-[var(--color-text-muted)]">No posts yet.</p>
+    ) : (
+      posts.map((post) => (
+        <PostCard
+          title={post.data.title}
+          description={post.data.description}
+          date={post.data.date}
+          tags={post.data.tags}
+          slug={post.id}
+          readingTime={post.body ? getReadingTime(post.body) : undefined}
+        />
+      ))
+    )
+  }
+</BaseLayout>

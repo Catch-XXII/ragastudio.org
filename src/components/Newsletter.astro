@@ -1,0 +1,40 @@
+---
+---
+
+<section class="w-full max-w-[680px] mx-auto px-6 py-12">
+  <div class="border border-[var(--color-border)] rounded-lg p-8 text-center">
+    <h3 class="font-[family-name:var(--font-serif)] text-2xl text-[var(--color-text-primary)] mb-2">
+      Stay in the loop
+    </h3>
+    <p class="font-[family-name:var(--font-mono)] text-sm tracking-[0.5px] text-[var(--color-text-muted)] mb-6">
+      Get notified when I publish something new. No spam, unsubscribe anytime.
+    </p>
+    <form id="newsletter-form" class="flex gap-3 max-w-md mx-auto">
+      <input
+        type="email"
+        placeholder="you@example.com"
+        required
+        class="flex-1 px-4 py-2.5 rounded-md bg-[var(--color-bg)] border border-[var(--color-border)] text-[var(--color-text-primary)] font-[family-name:var(--font-mono)] text-sm tracking-[0.5px] placeholder:text-[var(--color-text-faint)] focus:outline-none focus:border-[var(--color-accent)] transition-colors"
+      />
+      <button
+        type="submit"
+        class="px-5 py-2.5 rounded-md bg-[var(--color-accent)] text-white font-[family-name:var(--font-mono)] text-sm tracking-[1px] uppercase hover:opacity-90 transition-opacity cursor-pointer shrink-0"
+      >
+        Subscribe
+      </button>
+    </form>
+    <p id="newsletter-msg" class="mt-4 font-[family-name:var(--font-mono)] text-sm tracking-[0.5px] text-[var(--color-accent-soft)] hidden">
+      Thanks! You'll hear from us soon.
+    </p>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById("newsletter-form") as HTMLFormElement;
+  const msg = document.getElementById("newsletter-msg")!;
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    form.classList.add("hidden");
+    msg.classList.remove("hidden");
+  });
+</script>

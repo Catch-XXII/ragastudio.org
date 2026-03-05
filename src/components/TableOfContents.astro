@@ -1,0 +1,103 @@
+---
+---
+
+<!-- Mobile toggle (hidden on xl where sidebar shows) -->
+<div class="xl:hidden mb-6">
+  <button
+    id="toc-toggle"
+    class="font-[family-name:var(--font-mono)] text-xs tracking-[1.5px] uppercase text-[var(--color-text-faint)] hover:text-[var(--color-text-muted)] transition-colors cursor-pointer"
+  >
+    ▸ Table of Contents
+  </button>
+  <ul id="toc-list-mobile" class="hidden mt-3 space-y-2 text-sm border-l border-[var(--color-border)]">
+  </ul>
+</div>
+
+<style is:global>
+  .toc-link {
+    display: block;
+    padding: 2px 0 2px 16px;
+    color: var(--color-text-faint);
+    font-family: var(--font-mono);
+    letter-spacing: 0.5px;
+    font-size: 0.8125rem;
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    margin-left: -1px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .toc-link:hover {
+    color: var(--color-text-muted);
+  }
+  .toc-link.active {
+    color: var(--color-accent-soft);
+    border-left-color: var(--color-accent);
+  }
+  .toc-link[data-depth="3"] {
+    padding-left: 32px;
+    font-size: 0.75rem;
+  }
+</style>
+
+<script>
+  function initToc() {
+    const article = document.querySelector("article");
+    if (!article) return;
+
+    const headings = article.querySelectorAll("h2, h3");
+    if (headings.length === 0) return;
+
+    const sidebarList = document.getElementById("toc-sidebar-list");
+    const mobileList = document.getElementById("toc-list-mobile");
+    const toggle = document.getElementById("toc-toggle");
+
+    function buildLink(heading: Element) {
+      if (!heading.id) {
+        heading.id = heading.textContent!.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      }
+      const depth = heading.tagName === "H3" ? "3" : "2";
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = `#${heading.id}`;
+      a.textContent = heading.textContent;
+      a.className = "toc-link";
+      a.setAttribute("data-depth", depth);
+      li.appendChild(a);
+      return li;
+    }
+
+    headings.forEach((h) => {
+      if (sidebarList) sidebarList.appendChild(buildLink(h));
+      if (mobileList) mobileList.appendChild(buildLink(h));
+    });
+
+    // Mobile toggle
+    if (toggle && mobileList) {
+      toggle.addEventListener("click", () => {
+        const open = !mobileList.classList.contains("hidden");
+        mobileList.classList.toggle("hidden");
+        toggle.textContent = open ? "▸ Table of Contents" : "▾ Table of Contents";
+      });
+    }
+
+    // Scroll spy (desktop sidebar)
+    const sidebarLinks = sidebarList?.querySelectorAll("a") || [];
+    if (sidebarLinks.length > 0) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              sidebarLinks.forEach((l) => l.classList.remove("active"));
+              const active = sidebarList?.querySelector(`a[href="#${entry.target.id}"]`);
+              if (active) active.classList.add("active");
+            }
+          });
+        },
+        { rootMargin: "-10% 0px -80% 0px" }
+      );
+      headings.forEach((h) => observer.observe(h));
+    }
+  }
+
+  initToc();
+</script>

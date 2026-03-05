@@ -1,0 +1,36 @@
+---
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="sticky top-0 z-30 bg-[var(--color-bg)] py-4 mb-2 hidden lg:block">
+  <nav aria-label="Breadcrumb">
+    <ol class="flex items-center gap-1.5 font-[family-name:var(--font-mono)] text-sm tracking-[1px] uppercase flex-nowrap overflow-hidden">
+      <li class="shrink-0">
+        <a href="/" class="text-[var(--color-text-faint)] hover:text-[var(--color-text-muted)] transition-colors">
+          Home
+        </a>
+      </li>
+      {items.map((item, i) => (
+        <li class={`flex items-center ${item.href ? 'shrink-0' : 'min-w-0'}`}>
+          <span class="text-[var(--color-text-faint)] shrink-0 px-1.5">/</span>
+          {item.href ? (
+            <a href={item.href} class="text-[var(--color-text-faint)] hover:text-[var(--color-text-muted)] transition-colors whitespace-nowrap">
+              {item.label}
+            </a>
+          ) : (
+            <span class="text-[var(--color-text-muted)] truncate">{item.label}</span>
+          )}
+        </li>
+      ))}
+    </ol>
+  </nav>
+</div>

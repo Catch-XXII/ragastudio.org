@@ -1,0 +1,44 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostCard from "../../components/PostCard.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import { getCollection } from "astro:content";
+import { getReadingTime } from "../../utils/reading-time";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts", ({ data }) => !data.draft);
+  const tags = [...new Set(posts.flatMap((post) => post.data.tags))];
+  return tags.map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: posts
+        .filter((post) => post.data.tags.includes(tag))
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+    },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout title={`#${tag} — ragastudio`} description={`Posts tagged ${tag}`}>
+  <Breadcrumbs items={[{ label: "Posts", href: "/posts" }, { label: `#${tag}` }]} />
+  <h1
+    class="font-[family-name:var(--font-mono)] text-sm tracking-[3px] uppercase text-[var(--color-text-muted)] font-semibold mb-6"
+  >
+    Tagged: <span class="text-[var(--color-accent-soft)]">#{tag}</span>
+  </h1>
+  {
+    posts.map((post) => (
+      <PostCard
+        title={post.data.title}
+        description={post.data.description}
+        date={post.data.date}
+        tags={post.data.tags}
+        slug={post.id}
+        readingTime={post.body ? getReadingTime(post.body) : undefined}
+      />
+    ))
+  }
+</BaseLayout>

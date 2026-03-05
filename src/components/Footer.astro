@@ -1,0 +1,21 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer
+  class="w-full max-w-[680px] mx-auto px-6 py-8 border-t border-[var(--color-border)]"
+>
+  <div class="flex items-center justify-between">
+    <p
+      class="font-[family-name:var(--font-mono)] text-xs tracking-[1.5px] uppercase text-[var(--color-text-faint)]"
+    >
+      &copy; {year} ragastudio
+    </p>
+    <a
+      href="/rss.xml"
+      class="font-[family-name:var(--font-mono)] text-xs tracking-[1.5px] uppercase text-[var(--color-text-faint)] hover:text-[var(--color-text-muted)] transition-colors"
+    >
+      RSS
+    </a>
+  </div>
+</footer>

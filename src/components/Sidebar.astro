@@ -1,0 +1,142 @@
+---
+import { getCollection } from "astro:content";
+
+const currentPath = Astro.url.pathname;
+
+// Fetch all non-draft posts and count by category
+const allPosts = await getCollection("posts", ({ data }) => !data.draft);
+const postCountByCategory = allPosts.reduce(
+  (acc, post) => {
+    const category = post.data.category;
+    acc[category] = (acc[category] || 0) + 1;
+    return acc;
+  },
+  {} as Record<string, number>
+);
+
+// Format count helper: returns "(N)" or "(99+)" for counts over 99
+function formatCount(count: number): string {
+  return count > 99 ? "(99+)" : `(${count})`;
+}
+
+const navItems = [
+  { href: "/", label: "Home", icon: "🏠" },
+  { href: "#search", label: "Search", icon: "🔍" },
+  { href: "/categories/contemporary", label: "Contemporary", icon: "📰", category: "contemporary" },
+  { href: "/categories/literature", label: "Literature", icon: "📚", category: "literature" },
+  { href: "/categories/programming", label: "Programming", icon: "💻", category: "programming" },
+  { href: "/categories/ai", label: "AI", icon: "🤖", category: "ai" },
+  { href: "/categories/chess", label: "Chess", icon: "♟️", category: "chess" },
+  { href: "/categories/videos", label: "Short Videos", icon: "🎬", category: "videos" },
+];
+
+// Add counts to category items
+const itemsWithCounts = navItems.map((item) => ({
+  ...item,
+  count: item.category ? postCountByCategory[item.category] || 0 : undefined,
+}));
+
+function isActive(href: string, path: string) {
+  if (href === "/") return path === "/";
+  return path.startsWith(href);
+}
+---
+
+<!-- Desktop sidebar -->
+<aside class="hidden lg:flex fixed left-0 top-0 h-screen w-56 flex-col pt-6 pb-6 px-4 border-r border-[var(--color-border)] bg-[var(--color-bg)] z-40">
+  <nav class="flex flex-col gap-1 flex-1">
+    {itemsWithCounts.map((item) => (
+      <a
+        href={item.href}
+        class:list={[
+          "flex items-center gap-3 px-3 py-2.5 rounded-lg font-[family-name:var(--font-mono)] text-sm tracking-[0.5px] transition-all",
+          isActive(item.href, currentPath)
+            ? "bg-[var(--color-accent)]/10 border border-[var(--color-accent)]/20 text-[var(--color-accent-soft)]"
+            : "text-[var(--color-text-muted)] hover:bg-[var(--color-accent)]/5 hover:border hover:border-[var(--color-accent)]/10 hover:text-[var(--color-text-secondary)] border border-transparent",
+        ]}
+      >
+        <div class="flex items-center gap-3">
+          <span class="text-base">{item.icon}</span>
+          {item.count !== undefined && (
+            <span class="text-xs text-[var(--color-text-muted)]">{formatCount(item.count)}</span>
+          )}
+          <span>{item.label}</span>
+        </div>
+      </a>
+    ))}
+  </nav>
+</aside>
+
+<!-- Mobile hamburger button -->
+<button
+  id="sidebar-toggle"
+  aria-label="Open menu"
+  class="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors cursor-pointer"
+>
+  <svg id="hamburger-icon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <line x1="3" y1="6" x2="21" y2="6"></line>
+    <line x1="3" y1="12" x2="21" y2="12"></line>
+    <line x1="3" y1="18" x2="21" y2="18"></line>
+  </svg>
+  <svg id="close-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <line x1="18" y1="6" x2="6" y2="18"></line>
+    <line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg>
+</button>
+
+<!-- Mobile overlay -->
+<div id="sidebar-overlay" class="lg:hidden fixed inset-0 bg-black/60 z-40 hidden"></div>
+
+<!-- Mobile slide-out menu -->
+<aside id="sidebar-mobile" class="lg:hidden fixed left-0 top-0 h-screen w-64 flex-col pt-16 pb-6 px-4 border-r border-[var(--color-border)] bg-[var(--color-bg)] z-40 -translate-x-full transition-transform duration-300">
+  <nav class="flex flex-col gap-1">
+    {itemsWithCounts.map((item) => (
+      <a
+        href={item.href}
+        class:list={[
+          "flex items-center gap-3 px-3 py-3 rounded-lg font-[family-name:var(--font-mono)] text-sm tracking-[0.5px] transition-all",
+          isActive(item.href, currentPath)
+            ? "bg-[var(--color-accent)]/10 border border-[var(--color-accent)]/20 text-[var(--color-accent-soft)]"
+            : "text-[var(--color-text-muted)] hover:bg-[var(--color-accent)]/5 hover:border hover:border-[var(--color-accent)]/10 hover:text-[var(--color-text-secondary)] border border-transparent",
+        ]}
+      >
+        <div class="flex items-center gap-3">
+          <span class="text-base">{item.icon}</span>
+          {item.count !== undefined && (
+            <span class="text-xs text-[var(--color-text-muted)]">{formatCount(item.count)}</span>
+          )}
+          <span>{item.label}</span>
+        </div>
+      </a>
+    ))}
+  </nav>
+</aside>
+
+<script>
+  const toggle = document.getElementById("sidebar-toggle")!;
+  const overlay = document.getElementById("sidebar-overlay")!;
+  const mobile = document.getElementById("sidebar-mobile")!;
+  const hamburger = document.getElementById("hamburger-icon")!;
+  const closeIcon = document.getElementById("close-icon")!;
+
+  function openMenu() {
+    mobile.classList.remove("-translate-x-full");
+    overlay.classList.remove("hidden");
+    hamburger.classList.add("hidden");
+    closeIcon.classList.remove("hidden");
+  }
+
+  function closeMenu() {
+    mobile.classList.add("-translate-x-full");
+    overlay.classList.add("hidden");
+    hamburger.classList.remove("hidden");
+    closeIcon.classList.add("hidden");
+  }
+
+  toggle.addEventListener("click", () => {
+    const isOpen = !mobile.classList.contains("-translate-x-full");
+    isOpen ? closeMenu() : openMenu();
+  });
+
+  overlay.addEventListener("click", closeMenu);
+</script>

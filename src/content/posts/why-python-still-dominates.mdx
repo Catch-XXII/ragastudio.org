@@ -1,0 +1,146 @@
+---
+title: "Why Python Still Dominates in 2026"
+description: "A look at what makes Python the go-to language for everything from scripting to machine learning, with practical examples."
+date: 2026-03-05
+category: "programming"
+tags: ["python", "programming", "tutorial"]
+---
+
+Python has been around since 1991, and it's more relevant today than ever. Whether you're automating tasks, building APIs, or training ML models — Python is usually the first tool people reach for. Here's why.
+
+## The Zen of Python
+
+Every Python developer should read this at least once. Open a terminal and type:
+
+```python
+import this
+```
+
+The guiding philosophy boils down to: **readability counts**. Code is read far more often than it's written, and Python optimizes for that.
+
+## Getting Started
+
+If you're new to Python, here's what a basic script looks like:
+
+```python
+def greet(name: str) -> str:
+    """Return a personalized greeting."""
+    return f"Hello, {name}! Welcome to Python."
+
+if __name__ == "__main__":
+    print(greet("world"))
+```
+
+Clean, readable, no boilerplate. That's the appeal.
+
+## Data Structures That Just Work
+
+Python's built-in data structures are incredibly powerful:
+
+```python
+# List comprehension
+squares = [x ** 2 for x in range(10)]
+
+# Dictionary comprehension
+word_lengths = {word: len(word) for word in ["python", "is", "great"]}
+
+# Set operations
+frontend = {"html", "css", "javascript"}
+backend = {"python", "javascript", "go"}
+fullstack = frontend & backend  # {'javascript'}
+
+# Unpacking
+first, *middle, last = [1, 2, 3, 4, 5]
+# first=1, middle=[2, 3, 4], last=5
+```
+
+## Modern Python: Type Hints and Pattern Matching
+
+Python 3.10+ introduced structural pattern matching, and type hints have become standard:
+
+```python
+from dataclasses import dataclass
+from typing import Optional
+
+@dataclass
+class APIResponse:
+    status: int
+    data: Optional[dict] = None
+    error: Optional[str] = None
+
+def handle_response(response: APIResponse) -> str:
+    match response.status:
+        case 200:
+            return f"Success: {response.data}"
+        case 404:
+            return "Not found"
+        case 500:
+            return f"Server error: {response.error}"
+        case _:
+            return f"Unexpected status: {response.status}"
+```
+
+## Virtual Environments
+
+Always use virtual environments. Always.
+
+```bash
+# Create a virtual environment
+python -m venv .venv
+
+# Activate it
+source .venv/bin/activate  # macOS/Linux
+.venv\Scripts\activate     # Windows
+
+# Install packages
+pip install requests fastapi uvicorn
+
+# Freeze dependencies
+pip freeze > requirements.txt
+```
+
+## A Quick FastAPI Example
+
+Building an API in Python takes minutes, not hours:
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+async def root():
+    return {"message": "Hello from Python"}
+
+@app.get("/square/{number}")
+async def square(number: int):
+    return {"input": number, "result": number ** 2}
+```
+
+Run it with `uvicorn main:app --reload` and you've got a production-ready API with automatic OpenAPI docs at `/docs`.
+
+## When Not to Use Python
+
+Python isn't the best choice for everything:
+
+- **CPU-intensive computation** — use Rust, C++, or Go
+- **Mobile apps** — use Swift or Kotlin
+- **Real-time systems** — use C or Rust
+- **Frontend web** — use JavaScript/TypeScript
+
+Python excels at gluing things together, rapid prototyping, data work, and automation. Know its strengths and limitations.
+
+## Essential Libraries
+
+| Category | Library | What it does |
+|----------|---------|-------------|
+| Web | FastAPI | Modern async web framework |
+| Data | pandas | Data manipulation and analysis |
+| ML | scikit-learn | Machine learning toolkit |
+| HTTP | httpx | Modern async HTTP client |
+| CLI | typer | Build CLI apps with type hints |
+| Testing | pytest | The testing framework |
+
+---
+
+Python's longevity comes from its community, its readability, and its "batteries included" philosophy. If you haven't tried it recently, give it another look — it keeps getting better.

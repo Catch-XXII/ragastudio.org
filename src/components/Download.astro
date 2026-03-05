@@ -1,0 +1,32 @@
+---
+interface Props {
+  file: string;
+  label?: string;
+}
+
+const { file, label = "Download" } = Astro.props;
+---
+
+<a
+  href={file}
+  download
+  class="inline-flex items-center gap-2 my-4 px-4 py-2 rounded-lg
+    bg-[var(--color-surface)] border border-[var(--color-border)]
+    font-[family-name:var(--font-mono)] text-sm tracking-[1.5px] uppercase
+    text-[var(--color-text-secondary)]
+    hover:bg-[rgba(255,255,255,0.06)] hover:border-[rgba(255,255,255,0.12)] hover:text-[var(--color-text-primary)]
+    transition-all"
+>
+  <svg
+    class="w-4 h-4"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    viewBox="0 0 24 24"
+  >
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+    <polyline points="7 10 12 15 17 10"></polyline>
+    <line x1="12" y1="15" x2="12" y2="3"></line>
+  </svg>
+  {label}
+</a>

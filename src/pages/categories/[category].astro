@@ -1,0 +1,59 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PostCard from "../../components/PostCard.astro";
+import Breadcrumbs from "../../components/Breadcrumbs.astro";
+import { getCollection } from "astro:content";
+import { getReadingTime } from "../../utils/reading-time";
+
+const CATEGORIES: Record<string, { label: string; icon: string; description: string }> = {
+  literature: { label: "Literature", icon: "📚", description: "Books, authors, and the written word." },
+  programming: { label: "Programming", icon: "💻", description: "Code, tools, and the craft of software." },
+  ai: { label: "AI", icon: "🤖", description: "Machine learning, models, and the future." },
+  chess: { label: "Chess", icon: "♟️", description: "Strategy, games, and 64 squares." },
+  contemporary: { label: "Contemporary", icon: "📰", description: "Current events and modern life." },
+  videos: { label: "Short Videos", icon: "🎬", description: "Visual stories and embedded media." },
+};
+
+export async function getStaticPaths() {
+  const categories = ["literature", "programming", "ai", "chess", "contemporary", "videos"];
+  const posts = await getCollection("posts", ({ data }) => !data.draft);
+  return categories.map((category) => ({
+    params: { category },
+    props: {
+      category,
+      posts: posts
+        .filter((post) => post.data.category === category)
+        .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()),
+    },
+  }));
+}
+
+const { category, posts } = Astro.props;
+const meta = CATEGORIES[category];
+---
+
+<BaseLayout title={`${meta.label} — ragastudio`} description={meta.description}>
+  <Breadcrumbs items={[{ label: "Categories", href: "/" }, { label: meta.label }]} />
+  <header class="mb-8">
+    <h1 class="text-4xl font-semibold">
+      <span class="mr-3">{meta.icon}</span>{meta.label}
+    </h1>
+    <p class="text-lg text-[var(--color-text-secondary)] mt-2">{meta.description}</p>
+  </header>
+  {posts.length > 0 ? (
+    posts.map((post) => (
+      <PostCard
+        title={post.data.title}
+        description={post.data.description}
+        date={post.data.date}
+        tags={post.data.tags}
+        slug={post.id}
+        readingTime={post.body ? getReadingTime(post.body) : undefined}
+      />
+    ))
+  ) : (
+    <p class="text-[var(--color-text-muted)] font-[family-name:var(--font-mono)] text-sm tracking-[1px]">
+      No posts in this category yet. Check back soon.
+    </p>
+  )}
+</BaseLayout>

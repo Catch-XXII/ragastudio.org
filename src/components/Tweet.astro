@@ -1,0 +1,16 @@
+---
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+const tweetUrl = `https://x.com/i/status/${id}`;
+---
+
+<div class="my-6 flex justify-center">
+  <blockquote class="twitter-tweet" data-theme="dark">
+    <a href={tweetUrl}>Loading tweet…</a>
+  </blockquote>
+</div>
+
+<script is:inline src="https://platform.twitter.com/widgets.js" async></script>
