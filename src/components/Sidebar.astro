@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import { categories } from "../config/categories";
 
 const currentPath = Astro.url.pathname;
 
@@ -22,12 +23,12 @@ function formatCount(count: number): string {
 const navItems = [
   { href: "/", label: "Home", icon: "🏠" },
   { href: "#search", label: "Search", icon: "🔍" },
-  { href: "/categories/contemporary", label: "Contemporary", icon: "📰", category: "contemporary" },
-  { href: "/categories/literature", label: "Literature", icon: "📚", category: "literature" },
-  { href: "/categories/programming", label: "Programming", icon: "💻", category: "programming" },
-  { href: "/categories/ai", label: "AI", icon: "🤖", category: "ai" },
-  { href: "/categories/chess", label: "Chess", icon: "♟️", category: "chess" },
-  { href: "/categories/videos", label: "Short Videos", icon: "🎬", category: "videos" },
+  ...categories.map(cat => ({ 
+    href: `/categories/${cat.id}`, 
+    label: cat.label, 
+    icon: cat.emoji, 
+    category: cat.id 
+  })),
 ];
 
 // Add counts to category items
