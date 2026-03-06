@@ -5,6 +5,7 @@ import Breadcrumbs from "../../components/Breadcrumbs.astro";
 import { getCollection } from "astro:content";
 import { getReadingTime } from "../../utils/reading-time";
 import { categories, getCategoryById } from "../../config/categories";
+import { getEmojiFavicon } from "../../utils/favicon";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts", ({ data }) => !data.draft);
@@ -21,9 +22,10 @@ export async function getStaticPaths() {
 
 const { category, posts } = Astro.props;
 const meta = getCategoryById(category);
+const favicon = meta ? getEmojiFavicon(meta.emoji) : undefined;
 ---
 
-<BaseLayout title={`${meta.label} — ragastudio`} description={meta.description}>
+<BaseLayout title={`${meta.label} — ragastudio`} description={meta.description} favicon={favicon}>
   <Breadcrumbs items={[{ label: "Categories", href: "/" }, { label: meta.label }]} />
   <header class="mb-8">
     <h1 class="text-4xl font-semibold">
