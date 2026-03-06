@@ -47,28 +47,45 @@ function isActive(href: string, path: string) {
 <aside class="hidden fixed left-0 top-0 h-screen w-56 flex-col pt-6 pb-6 px-4 border-r border-[var(--color-border)] bg-[var(--color-bg)] z-40">
 </aside>
 
-<!-- Mobile hamburger button -->
-<button
-  id="sidebar-toggle"
-  aria-label="Open menu"
-  class="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors cursor-pointer"
->
-  <svg id="hamburger-icon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-    <line x1="3" y1="6" x2="21" y2="6"></line>
-    <line x1="3" y1="12" x2="21" y2="12"></line>
-    <line x1="3" y1="18" x2="21" y2="18"></line>
-  </svg>
-  <svg id="close-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-    <line x1="18" y1="6" x2="6" y2="18"></line>
-    <line x1="6" y1="6" x2="18" y2="18"></line>
-  </svg>
-</button>
+<!-- Mobile header bar - appears only on mobile -->
+<header class="lg:hidden fixed top-0 left-0 right-0 h-12 bg-[var(--color-bg)]/95 backdrop-blur border-b border-[var(--color-border)] z-50 flex items-center justify-between px-4">
+  <!-- Left: Hamburger button -->
+  <button
+    id="sidebar-toggle"
+    aria-label="Open menu"
+    class="p-2 rounded-lg bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-muted)] hover:text-[var(--color-text-secondary)] transition-colors cursor-pointer"
+  >
+    <svg id="hamburger-icon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+    <svg id="close-icon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+
+  <!-- Center: Logo/Brand -->
+  <a href="/" class="text-sm font-semibold text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors">
+    ragastudio
+  </a>
+
+  <!-- Right: Theme toggle -->
+  <button
+    id="mobile-theme-toggle"
+    aria-label="Toggle theme"
+    class="p-2 rounded-lg hover:bg-[var(--color-surface)] transition-colors text-lg"
+  >
+    <span id="mobile-theme-icon">🌙</span>
+  </button>
+</header>
 
 <!-- Mobile overlay -->
 <div id="sidebar-overlay" class="lg:hidden fixed inset-0 bg-black/60 z-40 hidden"></div>
 
 <!-- Mobile slide-out menu -->
-<aside id="sidebar-mobile" class="lg:hidden fixed left-0 top-0 h-screen w-64 flex-col pt-16 pb-6 px-4 border-r border-[var(--color-border)] bg-[var(--color-bg)] z-40 -translate-x-full transition-transform duration-300">
+<aside id="sidebar-mobile" class="lg:hidden fixed left-0 top-12 h-[calc(100vh-3rem)] w-64 flex-col pt-6 pb-6 px-4 border-r border-[var(--color-border)] bg-[var(--color-bg)] z-40 -translate-x-full transition-transform duration-300">
   <nav class="flex flex-col gap-1">
     {itemsWithCounts.map((item) => (
       <a
@@ -98,6 +115,8 @@ function isActive(href: string, path: string) {
   const mobile = document.getElementById("sidebar-mobile")!;
   const hamburger = document.getElementById("hamburger-icon")!;
   const closeIcon = document.getElementById("close-icon")!;
+  const mobileThemeToggle = document.getElementById("mobile-theme-toggle");
+  const mobileThemeIcon = document.getElementById("mobile-theme-icon");
 
   function openMenu() {
     mobile.classList.remove("-translate-x-full");
@@ -119,4 +138,31 @@ function isActive(href: string, path: string) {
   });
 
   overlay.addEventListener("click", closeMenu);
+
+  // Mobile theme toggle
+  if (mobileThemeToggle && mobileThemeIcon) {
+    // Set initial icon
+    const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    mobileThemeIcon.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+
+    mobileThemeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      const newTheme = isDark ? 'light' : 'dark';
+      
+      document.documentElement.classList.toggle('dark', newTheme === 'dark');
+      document.documentElement.classList.toggle('light', newTheme === 'light');
+      
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('theme', newTheme);
+      }
+      
+      mobileThemeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+      
+      // Sync with desktop theme toggle if it exists
+      const desktopThemeIcon = document.getElementById('theme-icon');
+      if (desktopThemeIcon) {
+        desktopThemeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+      }
+    });
+  }
 </script>
