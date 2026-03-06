@@ -4,20 +4,25 @@ import PostCard from "../components/PostCard.astro";
 import Breadcrumbs from "../components/Breadcrumbs.astro";
 import { getCollection } from "astro:content";
 import { getReadingTime } from "../utils/reading-time";
+import { getCategoryById } from "../config/categories";
 
 const allPosts = (await getCollection("posts", ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
 // Build searchable index
-const searchIndex = allPosts.map(post => ({
-  id: post.id,
-  title: post.data.title,
-  description: post.data.description,
-  tags: post.data.tags,
-  category: post.data.category,
-  date: post.data.date,
-  content: post.body.substring(0, 500), // First 500 chars for preview
-}));
+const searchIndex = allPosts.map(post => {
+  const categoryMeta = getCategoryById(post.data.category);
+  return {
+    id: post.id,
+    title: post.data.title,
+    description: post.data.description,
+    tags: post.data.tags,
+    category: post.data.category,
+    categoryEmoji: categoryMeta?.emoji || '📄',
+    date: post.data.date,
+    content: post.body.substring(0, 500), // First 500 chars for preview
+  };
+});
 ---
 
 <BaseLayout title="Search Articles" description="Search through all articles and blog posts">
@@ -98,6 +103,7 @@ const searchIndex = allPosts.map(post => ({
         return `
           <article class="mb-6 pb-6 border-b border-[var(--color-border)] last:border-b-0">
             <h2 class="text-xl font-semibold mb-2 hover:text-[var(--color-accent-soft)] transition-colors">
+              <span class="text-2xl mr-2">${post.categoryEmoji}</span>
               <a href="/posts/${post.id}/">${post.title}</a>
             </h2>
             <p class="text-[var(--color-text-secondary)] mb-3">${post.description}</p>
