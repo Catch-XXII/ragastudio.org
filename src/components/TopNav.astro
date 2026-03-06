@@ -1,0 +1,89 @@
+---
+import { getNavItems, isActive } from "../utils/nav";
+
+const currentPath = Astro.url.pathname;
+const navItems = await getNavItems();
+
+function isActiveLink(href: string, path: string) {
+  if (href === "/") return path === "/";
+  return path.startsWith(href);
+}
+---
+
+<!-- Apple-like top navigation bar -->
+<nav class="hidden lg:flex fixed top-0 left-0 right-0 h-12 bg-[var(--color-bg)]/95 backdrop-blur border-b border-[var(--color-border)] z-50">
+  <div class="w-full max-w-7xl mx-auto px-6 flex items-center justify-between">
+    <!-- Logo/Home -->
+    <a 
+      href="/" 
+      class={`text-xl font-semibold transition-colors ${
+        isActiveLink("/", currentPath) 
+          ? "text-[var(--color-accent)]" 
+          : "text-[var(--color-text-primary)] hover:text-[var(--color-accent)]"
+      }`}
+    >
+      ragastudio
+    </a>
+
+    <!-- Center nav items -->
+    <div class="flex items-center gap-8 flex-1 justify-center">
+      {navItems.map((item) => (
+        item.href !== "/" && (
+          <a
+            href={item.href}
+            class={`flex items-center gap-2 text-sm font-medium transition-colors relative group ${
+              isActiveLink(item.href, currentPath)
+                ? "text-[var(--color-accent)]"
+                : "text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]"
+            }`}
+          >
+            <span class="text-base">{item.icon}</span>
+            <span>{item.label}</span>
+            {/* Active indicator */}
+            {isActiveLink(item.href, currentPath) && (
+              <div class="absolute bottom-0 left-0 right-0 h-0.5 bg-[var(--color-accent)]"></div>
+            )}
+          </a>
+        )
+      ))}
+    </div>
+
+    <!-- Right side: theme toggle -->
+    <div class="flex items-center gap-4">
+      <button
+        id="theme-toggle"
+        aria-label="Toggle theme"
+        class="p-2 rounded-lg hover:bg-[var(--color-surface)] transition-colors text-lg"
+      >
+        <span id="theme-icon">🌙</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile hamburger button remains in Sidebar component -->
+
+<script>
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+
+  if (themeToggle && themeIcon) {
+    // Set initial icon
+    const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    themeIcon.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      const newTheme = isDark ? 'light' : 'dark';
+      
+      document.documentElement.classList.toggle('dark', newTheme === 'dark');
+      document.documentElement.classList.toggle('light', newTheme === 'light');
+      
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('theme', newTheme);
+      }
+      
+      themeIcon.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+    });
+  }
+</script>

@@ -43,29 +43,8 @@ function isActive(href: string, path: string) {
 }
 ---
 
-<!-- Desktop sidebar -->
-<aside class="hidden lg:flex fixed left-0 top-0 h-screen w-56 flex-col pt-6 pb-6 px-4 border-r border-[var(--color-border)] bg-[var(--color-bg)] z-40">
-  <nav class="flex flex-col gap-1 flex-1">
-    {itemsWithCounts.map((item) => (
-      <a
-        href={item.href}
-        class:list={[
-          "flex items-center gap-3 px-3 py-2.5 rounded-lg font-[family-name:var(--font-mono)] text-sm tracking-[0.5px] transition-all",
-          isActive(item.href, currentPath)
-            ? "bg-[var(--color-accent)]/10 border border-[var(--color-accent)]/20 text-[var(--color-accent-soft)]"
-            : "text-[var(--color-text-muted)] hover:bg-[var(--color-accent)]/5 hover:border hover:border-[var(--color-accent)]/10 hover:text-[var(--color-text-secondary)] border border-transparent",
-        ]}
-      >
-        <div class="flex items-center gap-3">
-          <span class="text-base">{item.icon}</span>
-          {item.count !== undefined && (
-            <span class="text-xs text-[var(--color-text-muted)]">{formatCount(item.count)}</span>
-          )}
-          <span>{item.label}</span>
-        </div>
-      </a>
-    ))}
-  </nav>
+<!-- Desktop sidebar - HIDDEN, replaced by TopNav -->
+<aside class="hidden fixed left-0 top-0 h-screen w-56 flex-col pt-6 pb-6 px-4 border-r border-[var(--color-border)] bg-[var(--color-bg)] z-40">
 </aside>
 
 <!-- Mobile hamburger button -->
