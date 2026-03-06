@@ -5,6 +5,7 @@ import Breadcrumbs from "../components/Breadcrumbs.astro";
 import { getCollection } from "astro:content";
 import { getReadingTime } from "../utils/reading-time";
 import { getCategoryById } from "../config/categories";
+import { getEmojiFavicon } from "../utils/favicon";
 
 const allPosts = (await getCollection("posts", ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
@@ -23,9 +24,11 @@ const searchIndex = allPosts.map(post => {
     content: post.body.substring(0, 500), // First 500 chars for preview
   };
 });
+
+const favicon = getEmojiFavicon('🔍');
 ---
 
-<BaseLayout title="Search Articles" description="Search through all articles and blog posts">
+<BaseLayout title="Search Articles" description="Search through all articles and blog posts" favicon={favicon}>
   <Breadcrumbs items={[{ label: "Search" }]} />
   
   <div class="mb-12">
