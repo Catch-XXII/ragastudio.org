@@ -6,23 +6,8 @@ const year = new Date().getFullYear();
 
 <footer class="w-full border-t border-[var(--color-border)]">
   <div class="w-full max-w-7xl mx-auto px-6">
-    <!-- Copyright bar - constrained to newsletter width -->
-    <div class="py-8 max-w-[680px] mx-auto">
-      <div class="flex items-center justify-between">
-        <p class="font-[family-name:var(--font-mono)] text-xs tracking-[1.5px] uppercase text-[var(--color-text-faint)]">
-          &copy; {year} ragastudio
-        </p>
-        <a
-          href="/rss.xml"
-          class="font-[family-name:var(--font-mono)] text-xs tracking-[1.5px] uppercase text-[var(--color-text-faint)] hover:text-[var(--color-text-muted)] transition-colors"
-        >
-          RSS
-        </a>
-      </div>
-    </div>
-
     <!-- Newsletter section -->
-    <div class="py-12 max-w-[680px] mx-auto">
+    <div class="py-8 max-w-[680px] mx-auto">
       <div class="border border-[var(--color-border)] rounded-lg p-8 text-center">
         <h3 class="font-[family-name:var(--font-serif)] text-2xl text-[var(--color-text-primary)] mb-2">
           Stay in the loop
@@ -47,6 +32,21 @@ const year = new Date().getFullYear();
         <p id="newsletter-msg" class="mt-4 font-[family-name:var(--font-mono)] text-sm tracking-[0.5px] text-[var(--color-accent-soft)] hidden">
           Thanks! You'll hear from us soon.
         </p>
+      </div>
+    </div>
+
+    <!-- Copyright bar - constrained to newsletter width -->
+    <div class="py-4 max-w-[680px] mx-auto">
+      <div class="flex items-center justify-between">
+        <p class="font-[family-name:var(--font-mono)] text-xs tracking-[1.5px] uppercase text-[var(--color-text-faint)]">
+          &copy; {year} ragastudio
+        </p>
+        <a
+          href="/rss.xml"
+          class="font-[family-name:var(--font-mono)] text-xs tracking-[1.5px] uppercase text-[var(--color-text-faint)] hover:text-[var(--color-text-muted)] transition-colors"
+        >
+          RSS
+        </a>
       </div>
     </div>
   </div>
