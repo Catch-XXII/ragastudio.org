@@ -6,6 +6,19 @@ const year = new Date().getFullYear();
 
 <footer class="w-full border-t border-[var(--color-border)]">
   <div class="w-full max-w-7xl mx-auto px-6">
+    <!-- Copyright bar at top -->
+    <div class="py-8 flex items-center justify-between">
+      <p class="font-[family-name:var(--font-mono)] text-xs tracking-[1.5px] uppercase text-[var(--color-text-faint)]">
+        &copy; {year} ragastudio
+      </p>
+      <a
+        href="/rss.xml"
+        class="font-[family-name:var(--font-mono)] text-xs tracking-[1.5px] uppercase text-[var(--color-text-faint)] hover:text-[var(--color-text-muted)] transition-colors"
+      >
+        RSS
+      </a>
+    </div>
+
     <!-- Newsletter section -->
     <div class="py-12 max-w-[680px] mx-auto">
       <div class="border border-[var(--color-border)] rounded-lg p-8 text-center">
@@ -33,19 +46,6 @@ const year = new Date().getFullYear();
           Thanks! You'll hear from us soon.
         </p>
       </div>
-    </div>
-
-    <!-- Copyright bar -->
-    <div class="py-8 border-t border-[var(--color-border)] flex items-center justify-between">
-      <p class="font-[family-name:var(--font-mono)] text-xs tracking-[1.5px] uppercase text-[var(--color-text-faint)]">
-        &copy; {year} ragastudio
-      </p>
-      <a
-        href="/rss.xml"
-        class="font-[family-name:var(--font-mono)] text-xs tracking-[1.5px] uppercase text-[var(--color-text-faint)] hover:text-[var(--color-text-muted)] transition-colors"
-      >
-        RSS
-      </a>
     </div>
   </div>
 </footer>
