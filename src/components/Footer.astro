@@ -6,17 +6,19 @@ const year = new Date().getFullYear();
 
 <footer class="w-full border-t border-[var(--color-border)]">
   <div class="w-full max-w-7xl mx-auto px-6">
-    <!-- Copyright bar at top -->
-    <div class="py-8 flex items-center justify-between">
-      <p class="font-[family-name:var(--font-mono)] text-xs tracking-[1.5px] uppercase text-[var(--color-text-faint)]">
-        &copy; {year} ragastudio
-      </p>
-      <a
-        href="/rss.xml"
-        class="font-[family-name:var(--font-mono)] text-xs tracking-[1.5px] uppercase text-[var(--color-text-faint)] hover:text-[var(--color-text-muted)] transition-colors"
-      >
-        RSS
-      </a>
+    <!-- Copyright bar - constrained to newsletter width -->
+    <div class="py-8 max-w-[680px] mx-auto">
+      <div class="flex items-center justify-between">
+        <p class="font-[family-name:var(--font-mono)] text-xs tracking-[1.5px] uppercase text-[var(--color-text-faint)]">
+          &copy; {year} ragastudio
+        </p>
+        <a
+          href="/rss.xml"
+          class="font-[family-name:var(--font-mono)] text-xs tracking-[1.5px] uppercase text-[var(--color-text-faint)] hover:text-[var(--color-text-muted)] transition-colors"
+        >
+          RSS
+        </a>
+      </div>
     </div>
 
     <!-- Newsletter section -->
