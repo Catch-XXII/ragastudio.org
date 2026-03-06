@@ -107,7 +107,7 @@ const favicon = getEmojiFavicon('🔍');
           <article class="mb-6 pb-6 border-b border-[var(--color-border)] last:border-b-0">
             <h2 class="text-xl font-semibold mb-2 hover:text-[var(--color-accent-soft)] transition-colors">
               <span class="text-2xl mr-2">${post.categoryEmoji}</span>
-              <a href="/posts/${post.id}/">${post.title}</a>
+              <a href="/posts/${post.id.replace(/\.mdx?$/, '')}/">${post.title}</a>
             </h2>
             <p class="text-[var(--color-text-secondary)] mb-3">${post.description}</p>
             <div class="flex items-center justify-between text-sm text-[var(--color-text-muted)]">
